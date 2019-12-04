@@ -33,7 +33,8 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	reader(ws)
+	go reader(ws)
+	go reader2(ws)
 }
 
 func reader(conn *websocket.Conn) {
@@ -45,7 +46,25 @@ func reader(conn *websocket.Conn) {
 			return
 		}
 
-		fmt.Println(string(p))
+		fmt.Println("from 1: " + string(p))
+
+		if err := conn.WriteMessage(messageType, p); err != nil {
+			log.Println(err)
+			return
+		}
+	}
+}
+
+func reader2(conn *websocket.Conn) {
+	for {
+
+		messageType, p, err := conn.ReadMessage()
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		fmt.Println("from 2: " + string(p))
 
 		if err := conn.WriteMessage(messageType, p); err != nil {
 			log.Println(err)
