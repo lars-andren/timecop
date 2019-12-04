@@ -1,21 +1,26 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"net/http"
-	"strings"
 )
 
-func sayHello(w http.ResponseWriter, r *http.Request) {
-	message := r.URL.Path
-	message = strings.TrimPrefix(message, "/")
-	message = "You input: " + message
+func homePage(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Home Page")
+}
 
-	_, _ = w.Write([]byte(message))
+func wsEndpoint(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello World")
+}
+
+func setupRoutes() {
+	http.HandleFunc("/", homePage)
+	http.HandleFunc("/ws", wsEndpoint)
 }
 
 func main() {
-	http.HandleFunc("/", sayHello)
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		panic(err)
-	}
+	fmt.Println("Hello World")
+	setupRoutes()
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
