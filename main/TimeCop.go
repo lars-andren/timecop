@@ -13,7 +13,7 @@ var upgrader = websocket.Upgrader{
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Regular http")
+	fmt.Fprintf(w, "Regular http, websocket at /ws")
 }
 
 func wsEndpoint(w http.ResponseWriter, r *http.Request) {
@@ -51,7 +51,6 @@ func reader(conn *websocket.Conn) {
 			log.Println(err)
 			return
 		}
-
 	}
 }
 
